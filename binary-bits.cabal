@@ -36,7 +36,8 @@ test-suite qc
   default-language:    Haskell98
 
   build-depends: base==4.*, binary >= 0.6.0.0, bytestring,
-                 QuickCheck>=2, random,
+                 QuickCheck>=2, 
+                 random==1.1,
                  test-framework,
                  test-framework-quickcheck2
 
