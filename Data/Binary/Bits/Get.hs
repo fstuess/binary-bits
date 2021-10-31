@@ -89,7 +89,6 @@ import Data.Binary.Get.Internal as B ( get, put, ensureN )
 import Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import Data.ByteString.Unsafe
-
 import Data.Bits
 import Data.Word
 import Control.Applicative
@@ -342,9 +341,12 @@ newtype BitGet a = B { runState :: S -> Get (S,a) }
 
 instance Monad BitGet where
   return x = B $ \s -> return (s,x)
-  fail str = B $ \(S inp n) -> putBackState inp n >> fail str
   (B f) >>= g = B $ \s -> do (s',a) <- f s
                              runState (g a) s'
+
+instance MonadFail BitGet where
+  fail str = B $ \(S inp n) -> putBackState inp n >> error str
+
 
 instance Functor BitGet where
   fmap f m = m >>= \a -> return (f a)
